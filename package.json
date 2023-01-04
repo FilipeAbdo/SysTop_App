@@ -1,10 +1,15 @@
 {
   "name": "systop_app",
   "version": "1.0.0",
-  "description": "App that monitors system data",
-  "main": "index.js",
+  "description": "App that monitors system cpu",
+  "main": "main.js",
+  "produtcName": "SysTop_App",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron .",
+    "dev": "nodemon --exec electron .",
+    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
+    "package-win": "electron-packager . --overwrite --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=false --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"SysTop_App\"",
+    "package-linux": "electron-packager . --overwrite --platform=linux --arch=x64 --icon=assets/icons/icon.png --prune=false --out=release-builds"
   },
   "repository": {
     "type": "git",
@@ -15,5 +20,13 @@
   "bugs": {
     "url": "https://github.com/FilipeAbdo/SysTop_App/issues"
   },
-  "homepage": "https://github.com/FilipeAbdo/SysTop_App#readme"
+  "homepage": "https://github.com/FilipeAbdo/SysTop_App#readme",
+  "devDependencies": {
+    "electron": "^22.0.0",
+    "electron-packager": "^17.1.1",
+    "nodemon": "^2.0.20"
+  },
+  "dependencies": {
+    "electron-log": "^4.4.8"
+  }
 }

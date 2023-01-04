@@ -1,0 +1,26 @@
+.black-theme{
+    background-color: black;
+    color: gainsboro;
+}
+
+.my-small-font{
+    font-weight: 200;
+}
+
+.my-medium-font{
+    font-weight: 300;
+}
+
+.my-title{
+    font-weight: 750;
+    font-size: 20px;
+}
+
+.main-container{
+    padding: 20px;
+}
+
+.center-content{
+    display: table;
+    margin: auto;
+}

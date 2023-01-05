@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'">
+    <!-- <link rel="stylesheet" href="css/materialize.min.css"> -->
+    <link rel="stylesheet" href="css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/checkbox.css">
+</head>
+<body class="">
+    <main>
+        <div class="content main-container show">
+            <span class="my-title center-content"><i class="fas fa-cog"></i> Settings</span>
+            <div id="alert" class="hide"></div>
+            <form id="settings-form">
+                <div class="my-checkbox-div">
+                    <label class="my-medium-font bold" for="alertEnable">Enable Alerts
+                        <input type="checkbox" id="alertEnable" checked="checked">
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                <div class="form-control">
+                    <label for="cpu-warning">CPU Load Warning %</label>
+                    <input type="number" id="cpu-warning">
+                </div>
+                <div class="form-control">
+                    <label for="cpu-overload">CPU Overload Alert %</label>
+                    <input type="number" id="cpu-overload">
+                </div>
+                <div class="form-control">
+                    <label for="alert-frequency">Alert Frequency (in Minutes)</label>
+                    <input type="number" id="alert-frequency">
+                </div>
+                <input type="submit" value="Save" class="btn">
+            </form>
+        </div>
+    </main>
+    <nav id="nav">
+        <ul>
+            <li>
+                <i class="fas fa-microchip"></i>
+                <p class="my-small-font bold">CPU</p>
+            </li>
+            <li>
+                <i class="fas fa-info"></i>
+                <p class="my-small-font bold">System Info</p>
+            </li>
+            <li>
+                <i class="fas fa-cog"></i>
+                <p class="my-small-font bold">Settings</p>
+            </li>
+        </ul>
+    </nav>
+    <script src="js/tabs.js"></script>
+    <script src="js/monitor.js"></script>
+    <script src="js/alertsManager.js"></script>
+</body>
+</html>

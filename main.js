@@ -1,85 +1,63 @@
-const {app, BrowserWindow, Menu} = require('electron')
+const path = require('path')
+const {app, BrowserWindow, Menu, ipcMain} = require('electron')
+const Store = require('./app/js/Store');
+const MainWindow = require('./MainWindow');
+const AboutWindow = require('./AboutWindow');
+const AppTray = require('./AppTray');
+const {getMainMenu} = require('./menus');
 
-process.env.NODE_ENV = 'development'
+process.env.NODE_ENV = 'production'
 
 const isDev = (process.env.NODE_ENV !== 'production')? true:false;
 const isMac = process.platform === 'darwin'? true:false;
 
 let mainWindow;
 let aboutWindow;
+let tray
 
+//init store & defaults
+const store = new Store({
+    configName: 'user-settings',
+    defaults: {
+        settings: {
+            cpuWarning: 75,
+            cpuOverload: 85,
+            alertFrequency: 5,
+            enableAlerts: true,
+        },
+    }
+})
 
 function createMainWindow(){
-    mainWindow = new BrowserWindow({
-        title: "SysTop | Monitor your CPU",
-        width: 500,
-        height: 600,
-        icon: './assets/icons/win/icon.ico',
-    })
-
-    if(isDev === true){
-        mainWindow.setPosition(3107,496, false)
-        mainWindow.maximize();
-        mainWindow.openDevTools();        
-    }else{
-        mainWindow.setMaximumSize(mainWindow.getBounds().width + 10, mainWindow.getBounds().height + 30)
-    }
-
-    mainWindow.loadFile("./app/index.html")
-    mainWindow.setAlwaysOnTop(true)
-    mainWindow.on('ready-to-show', () =>{
-        mainWindow.setAlwaysOnTop(false)
-        mainWindow.show()
-    })
+    mainWindow = new MainWindow(isDev, isMac, "./app/index.html", app)
 }
 
 function createAboutWindow(){
-    aboutWindow = new BrowserWindow({
-        title: 'About ' + app.name,
-        width: 300,
-        height: 300,
-        icon: './assets/icons/win/icon.ico',
-    })
-
-    aboutWindow.loadFile("./app/about.html");
+    aboutWindow = new AboutWindow("./app/about.html", app);
 }
 
-const menu = [
-    ...(isMac?[{
-            label: app.name,
-            submenu: [
-                {
-                    label: 'About',
-                    click: createAboutWindow
-                }
-            ] 
-        }] : []),
-    {
-        role: 'fileMenu'
-    },
-    ...(isDev? [{
-        label: 'Developer',
-        submenu:[
-            {role: 'reload'},
-            {role: 'forcereload'},
-            {role: 'separator'},
-            {role: 'toggleDevTools'},
-        ]
-    }]:[]),
-    ...(!isMac? [{
-        label: 'Help',
-        submenu: [{
-            label: 'About',
-            click: createAboutWindow,
-        }]
-    }]:[]),
-]
+
 app.on('ready', () => {
     createMainWindow()
-
+    
+    const menu = getMainMenu(isDev, isMac, mainWindow, createAboutWindow)
     const mainMenu = Menu.buildFromTemplate(menu)
     Menu.setApplicationMenu(mainMenu)
+
+    app.isQuitting = false
+
+    const icon = path.join(__dirname, 'assets', 'icons', 'tray_icon.png')
+
+    //Create tray
+    tray = new AppTray(icon, app, mainWindow)
+
 })
+
+ipcMain.on('settings:set', (e,settings) => {
+    store.Set('settings', settings)
+    // mainWindow.webContents.send('settings:get', store.get('settings'))
+})
+
 
 app.on('win-all-closed', () => {
     if (isMac === false){

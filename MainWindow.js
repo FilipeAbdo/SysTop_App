@@ -1,4 +1,5 @@
 const { BrowserWindow } = require('electron')
+const Store = require('./app/js/Store')
 
 class MainWindow extends BrowserWindow{
     constructor (isDev, isMac, file, app) {
@@ -46,10 +47,6 @@ class MainWindow extends BrowserWindow{
             }
         })
 
-        this.on('dom-ready', ()=>{
-            this.webContents.send('settings:get', store.get('settings'))
-            this.webContents.send('app:init')
-        })
     }
 }
 

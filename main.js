@@ -49,8 +49,12 @@ app.on('ready', () => {
     const icon = path.join(__dirname, 'assets', 'icons', 'tray_icon.png')
 
     //Create tray
-    tray = new AppTray(icon, app, mainWindow)
+    tray = new AppTray(icon, app, mainWindow, store)
 
+    mainWindow.webContents.on('dom-ready', ()=>{
+        mainWindow.webContents.send('settings:get', store.get('settings'))
+        mainWindow.webContents.send('app:init')
+    })
 })
 
 ipcMain.on('settings:set', (e,settings) => {
